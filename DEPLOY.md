@@ -41,6 +41,34 @@ npm run build
 npm run preview
 ```
 
+## SEO & the share card
+
+The share card (LinkedIn, WhatsApp, X, Slack, Discord) and the canonical link
+need the site's **absolute** URL. Social scrapers do not run JavaScript and do
+not resolve relative paths, so these are baked into `index.html` at build time
+by `plugins/seo.js`, which also emits `robots.txt` and `sitemap.xml`.
+
+The URL is detected automatically, in this order:
+
+1. `VITE_SITE_URL` — explicit override, always wins
+2. `VERCEL_PROJECT_PRODUCTION_URL` / `VERCEL_URL` — set by Vercel
+3. `URL` / `DEPLOY_PRIME_URL` — set by Netlify
+4. `http://localhost:3000` — local fallback
+
+On Vercel or Netlify nothing needs configuring. Anywhere else — including a
+local `npm run build` whose `dist/` you upload by hand — set `VITE_SITE_URL`,
+or the card will point at localhost and fail to render.
+
+```bash
+VITE_SITE_URL=https://your-domain.com npm run build
+```
+
+After deploying, prime the scrapers' caches:
+- LinkedIn: https://www.linkedin.com/post-inspector/
+- Facebook/WhatsApp: https://developers.facebook.com/tools/debug/
+- X: https://cards-dev.twitter.com/validator
+- Google: submit `sitemap.xml` in Search Console
+
 ## Deployment to GitHub Pages
 
 ### 1. Update Configuration

@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import seo from './plugins/seo'
+import { siteConfig } from './src/config/site'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), seo(siteConfig)],
   base: './',
   build: {
     outDir: 'dist',

@@ -1,5 +1,9 @@
 export const siteConfig = {
   name: "PRINCE",
+  // The name people actually search for. `name` stays the display brand used
+  // across the UI; this one drives the page title and the Person structured
+  // data, which is what ties the site to the GitHub and LinkedIn profiles.
+  fullName: "Prince Barman",
   username: "prince-dualsec",
   role: "Cybersecurity Expert & Security Tester",
   description: "Passionate cybersecurity professional specializing in penetration testing, web security, OSINT, and ethical hacking. Dedicated to making the digital world a safer place.",
