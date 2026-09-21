@@ -1,0 +1,621 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════
+   THEME SYSTEM — CSS Custom Properties
+   ═══════════════════════════════════════════════ */
+
+:root {
+  --accent: #00d4ff;
+  --accent-rgb: 0, 212, 255;
+  --accent-secondary: #00ff88;
+  --accent-tertiary: #ff00aa;
+}
+
+/* Dark Theme (default) */
+.theme-dark,
+[data-theme="dark"] {
+  --cyber-black: 10 10 15;
+  --cyber-navy: 13 17 23;
+  --cyber-dark: 22 27 34;
+  --cyber-card: 28 35 51;
+  --cyber-border: 33 38 45;
+  --cyber-cyan: 0 212 255;
+  --cyber-blue: 0 112 243;
+  --cyber-purple: 121 192 255;
+  --cyber-green: 0 255 136;
+  --cyber-red: 255 71 87;
+  --cyber-orange: 249 115 22;
+  --cyber-text: 201 209 217;
+  --cyber-muted: 139 148 158;
+  --cyber-white: 230 237 243;
+
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0d1117;
+  --bg-surface: #161b22;
+  --bg-card: #1c2333;
+  --bg-card-alpha: rgba(28, 35, 51, 0.6);
+  --bg-card-solid: #14192a;
+  --border-color: #21262d;
+  --border-alpha: rgba(0, 212, 255, 0.1);
+  --border-hover: rgba(0, 212, 255, 0.3);
+  --text-primary: #e6edf3;
+  --text-body: #c9d1d9;
+  --text-muted: #8b949e;
+  --glow-color: rgba(0, 212, 255, 0.15);
+  --glow-strong: rgba(0, 212, 255, 0.3);
+  --scrollbar-track: #0a0a0f;
+  --scrollbar-thumb: #21262d;
+  --grid-opacity: 0.03;
+}
+
+/* Light Theme */
+.theme-light,
+[data-theme="light"] {
+  --cyber-black: 240 241 245;
+  --cyber-navy: 230 231 236;
+  --cyber-dark: 220 222 228;
+  --cyber-card: 255 255 255;
+  --cyber-border: 190 195 205;
+  --cyber-cyan: 0 112 243;
+  --cyber-blue: 0 80 200;
+  --cyber-purple: 88 140 210;
+  --cyber-green: 16 163 96;
+  --cyber-red: 220 50 60;
+  --cyber-orange: 200 90 10;
+  --cyber-text: 30 38 55;
+  --cyber-muted: 60 70 90;
+  --cyber-white: 15 23 42;
+
+  --accent: #0070f3;
+  --accent-rgb: 0, 112, 243;
+
+  --bg-primary: #f4f6fa;
+  --bg-secondary: #eef0f4;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-alpha: rgba(255, 255, 255, 0.8);
+  --bg-card-solid: #fbfcfe;
+  --border-color: #d8dce6;
+  --border-alpha: rgba(0, 112, 243, 0.15);
+  --border-hover: rgba(0, 112, 243, 0.35);
+  --text-primary: #0f172a;
+  --text-body: #1e293b;
+  --text-muted: #475569;
+  --glow-color: rgba(0, 112, 243, 0.1);
+  --glow-strong: rgba(0, 112, 243, 0.2);
+  --scrollbar-track: #eef0f4;
+  --scrollbar-thumb: #c0c5d0;
+  --grid-opacity: 0.04;
+}
+
+/* ═══════════════════════════════════════════════
+   THEME-AWARE COMPONENT OVERRIDES
+   ═══════════════════════════════════════════════ */
+
+.theme-light .glass-card {
+  background: var(--bg-card-solid);
+  border-color: rgba(0, 112, 243, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.theme-light .glass-card:hover {
+  border-color: rgba(0, 112, 243, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 112, 243, 0.1), 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+.theme-light .cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 112, 243, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 112, 243, 0.06) 1px, transparent 1px);
+}
+
+.theme-light .neon-text {
+  text-shadow: 0 0 10px rgba(0, 112, 243, 0.2), 0 0 20px rgba(0, 112, 243, 0.1);
+}
+
+.theme-light .neon-glow {
+  box-shadow: 0 0 5px rgba(0, 112, 243, 0.1), 0 0 20px rgba(0, 112, 243, 0.05);
+}
+
+/* Hero section light mode */
+.theme-light .hero-blur-cyan {
+  background: rgba(0, 112, 243, 0.08) !important;
+}
+
+.theme-light .hero-blur-blue {
+  background: rgba(0, 80, 200, 0.06) !important;
+}
+
+.theme-light .hero-floating-icon {
+  color: rgba(0, 112, 243, 0.12) !important;
+}
+
+/* Navbar light mode */
+.theme-light .navbar-scrolled {
+  background: rgba(244, 246, 250, 0.92) !important;
+  border-bottom-color: rgba(0, 112, 243, 0.1) !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-light .navbar-mobile-menu {
+  background: rgba(244, 246, 250, 0.98) !important;
+}
+
+/* Footer light mode */
+.theme-light footer {
+  background: rgba(244, 246, 250, 0.7) !important;
+  border-top-color: rgba(0, 112, 243, 0.1) !important;
+}
+
+/* Project card header light mode */
+.theme-light .project-card-header {
+  background: linear-gradient(135deg, rgba(0, 112, 243, 0.06) 0%, rgba(0, 80, 200, 0.04) 100%) !important;
+}
+
+.theme-light .project-card-header .cyber-grid {
+  opacity: 0.15 !important;
+}
+
+.theme-light .skill-fill {
+  background: linear-gradient(90deg, var(--skill-color) 0%, rgba(0, 112, 243, 0.8) 100%);
+}
+
+.theme-light .cyber-border::before {
+  background: linear-gradient(90deg, transparent, #0070f3, transparent);
+}
+
+.theme-light ::selection {
+  background-color: rgba(0, 112, 243, 0.15);
+  color: #0070f3;
+}
+
+.theme-light .boot-screen {
+  background: #f8f9fc !important;
+}
+
+.theme-light .boot-terminal {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(0, 112, 243, 0.3) !important;
+}
+
+.theme-light .boot-header {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: #e1e4e8 !important;
+}
+
+.theme-light .cv-modal {
+  background: rgba(255, 255, 255, 0.98) !important;
+}
+
+.theme-light .cv-input {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e1e4e8 !important;
+}
+
+.theme-light .cv-input:focus {
+  border-color: rgba(0, 112, 243, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.1) !important;
+}
+
+.theme-light .cv-input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* ═══════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════ */
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    caret-color: var(--accent);
+  }
+
+  /* The native cursor is hidden ONLY while CustomCursor is actually drawing a
+     replacement. It sets .custom-cursor-active on <html> when it mounts on a
+     fine-pointer device. Deciding this in JS alone keeps the two from
+     disagreeing and leaving the page with no cursor whatsoever — which is what
+     happened on touchscreen laptops, where the old media query kept the native
+     cursor hidden while the script had already bailed out.
+
+     The `body` in each selector is there for specificity: Tailwind's
+     cursor-pointer / cursor-default utilities are emitted after this layer and
+     would otherwise win, showing a native cursor next to the custom one. */
+  .custom-cursor-active body,
+  .custom-cursor-active body * {
+    cursor: none;
+  }
+
+  /* Text fields keep their I-beam; the arrow fades out over them instead. */
+  .custom-cursor-active body input:is([type="text"], [type="email"], [type="url"], [type="search"], [type="password"], [type="tel"], [type="number"]),
+  .custom-cursor-active body textarea,
+  .custom-cursor-active body [contenteditable="true"] {
+    cursor: text;
+  }
+
+  .custom-cursor-active body button:disabled,
+  .custom-cursor-active body [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  ::selection {
+    background-color: rgba(var(--accent-rgb), 0.2);
+    color: var(--accent);
+  }
+}
+
+@layer components {
+  /* No backdrop-filter here. There are 60+ of these on the page once the
+     looped sections render, and each blurred surface makes the compositor
+     snapshot and blur its backdrop on every scroll frame — the single biggest
+     source of scroll jank. These cards sit on a flat background, so a slightly
+     more opaque fill is visually near-identical at a fraction of the cost.
+     Blur is kept only on the few surfaces that genuinely overlap content
+     (navbar, modals, dropdowns, chat panel). */
+  .glass-card {
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border-alpha);
+    border-radius: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .glass-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 8px 32px var(--glow-color);
+  }
+
+  .cyber-border {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cyber-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: cyberScan 3s linear infinite;
+  }
+
+  @keyframes cyberScan {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .neon-text {
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.6), 0 0 30px rgba(var(--accent-rgb), 0.3), 0 0 60px rgba(var(--accent-rgb), 0.15);
+  }
+
+  .neon-glow {
+    box-shadow: 0 0 5px rgba(var(--accent-rgb), 0.25), 0 0 20px rgba(var(--accent-rgb), 0.12);
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold mb-2;
+    color: var(--text-primary);
+  }
+
+  .section-subtitle {
+    @apply text-lg mb-12;
+    color: var(--text-muted);
+  }
+
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(var(--accent-rgb), var(--grid-opacity)) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--accent-rgb), var(--grid-opacity)) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 active:scale-95;
+    background: rgba(var(--accent-rgb), 0.1);
+    border: 1px solid rgba(var(--accent-rgb), 0.5);
+    color: var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: rgba(var(--accent-rgb), 0.2);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.3);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 active:scale-95;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 transition-colors duration-200;
+    color: var(--text-muted);
+  }
+
+  .btn-ghost:hover {
+    color: var(--accent);
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg transition-all duration-300 focus:outline-none;
+    background: rgb(var(--cyber-dark) / 0.5);
+    border: 1px solid var(--border-color);
+    color: var(--text-body);
+  }
+
+  .input-field::placeholder {
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  .input-field:focus {
+    border-color: rgba(var(--accent-rgb), 0.5);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
+  }
+
+  .skill-bar {
+    @apply h-2 rounded-full overflow-hidden;
+    background: rgb(var(--cyber-dark) / 1);
+  }
+
+  .skill-fill {
+    @apply h-full rounded-full transition-all duration-1000 ease-out;
+    background: linear-gradient(90deg, var(--skill-color) 0%, rgba(var(--accent-rgb), 0.8) 100%);
+  }
+
+  .tool-accent-border {
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .tool-accent-border:hover {
+    box-shadow: -4px 0 20px var(--tool-glow, rgba(var(--accent-rgb), 0.15));
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, var(--accent), rgb(var(--cyber-blue)));
+  }
+
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, rgba(var(--accent-rgb), 0.08) 0%, transparent 70%);
+  }
+
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+/* Glitch text effect */
+@keyframes glitch {
+  0%, 100% { text-shadow: 2px 0 var(--accent), -2px 0 var(--accent-tertiary); }
+  25% { text-shadow: -2px -1px var(--accent), 2px 1px var(--accent-tertiary); }
+  50% { text-shadow: 1px 2px var(--accent), -1px -2px var(--accent-tertiary); }
+  75% { text-shadow: -1px 1px var(--accent), 1px -1px var(--accent-tertiary); }
+}
+
+.glitch-text {
+  animation: glitch 3s infinite;
+}
+
+/* Fade-in on scroll */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.6s ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(var(--accent-rgb), 0.15);
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--accent-rgb), 0.3);
+}
+
+/* ═══════════════════════════════════════════════
+   PRINT — only the CV sheet reaches the printer
+   ═══════════════════════════════════════════════ */
+
+/* The CV is printed from a purpose-built document (src/utils/cvDocument.js)
+   rendered in a hidden iframe, not from this page. These rules only cover the
+   case where someone prints the site itself. */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    cursor: auto;
+  }
+
+  .cv-print-hide,
+  .no-print,
+  nav,
+  footer {
+    display: none !important;
+  }
+
+  .glass-card {
+    border-color: #ddd !important;
+    background: #fff !important;
+  }
+}
+
+
+
+/* ═══════════════════════════════════════════════
+   MOBILE PERFORMANCE
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 767px) {
+  /* Backdrop blur is the most expensive effect on the page and mobile GPUs
+     handle it worst. Swap every remaining blurred surface for an opaque fill. */
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .navbar-scrolled,
+  .cv-modal {
+    background: var(--bg-secondary) !important;
+  }
+
+  /* The hero's 600px/400px blurred colour blobs cost a large filter pass for a
+     faint glow that is barely visible on a phone. */
+  .hero-blur-cyan,
+  .hero-blur-blue {
+    display: none !important;
+  }
+
+  /* Purely decorative infinite animations keep the compositor awake forever
+     and drain battery for ornaments most phone users never notice. */
+  .decor-animated {
+    animation: none !important;
+  }
+}
+
+/* Long unbroken strings (hashes, DNS records, URLs) must not push the page
+   sideways on a phone. */
+.break-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* ═══════════════════════════════════════════════
+   MOTION — interaction polish
+   All of these animate transform/opacity only, so they stay on the compositor
+   and cost nothing on the main thread. The global reduced-motion rule higher
+   up neutralises every one of them.
+   ═══════════════════════════════════════════════ */
+
+/* Cards lift and tilt slightly toward the viewer on hover. */
+.lift {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s ease,
+              box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 34px rgba(var(--accent-rgb), 0.12);
+  }
+
+  .lift-strong:hover {
+    transform: translateY(-6px) scale(1.015);
+  }
+}
+
+/* Sheen that sweeps across a card once on hover. */
+.sheen {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(var(--accent-rgb), 0.10) 48%,
+    transparent 66%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sheen:hover::after {
+    transform: translateX(120%);
+  }
+}
+
+/* Slow gradient drift for hero display type. */
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+.text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    rgb(var(--cyber-green)) 35%,
+    var(--accent) 60%,
+    rgb(var(--cyber-blue)) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 9s ease-in-out infinite;
+}
+
+@media (max-width: 767px) {
+  /* Continuous ambient motion is ornamental; keep phones calm and cool. */
+  .text-shimmer { animation: none; }
+}

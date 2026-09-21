@@ -1,0 +1,36 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Production
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+server/.env
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.tgz
+*.map
+
+# Captured server run logs
+server_output.txt
+server_error.txt

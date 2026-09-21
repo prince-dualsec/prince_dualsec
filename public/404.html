@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PRINCE | Cybersecurity Expert</title>
+    <script>
+      // GitHub Pages SPA redirect for HashRouter
+      var l = window.location;
+      if (l.protocol === 'file:' || l.pathname.indexOf('/404.html') !== -1) {
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <script>
+      // SPA redirect logic for GitHub Pages
+      (function(l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search.slice(1).split('&').map(function(s) {
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <div id="root"></div>
+  </body>
+</html>
