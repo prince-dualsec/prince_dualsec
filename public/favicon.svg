@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Brand mark: angular crest shield with a P monogram.
+       Kept in sync with src/components/Logo.jsx -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#0070f3"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 2.2 L27.5 6.4 V15.4 L16 29.8 L4.5 15.4 V6.4 Z"
+        fill="url(#g)" fill-opacity="0.12"
+        stroke="url(#g)" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M12.2 8.4 H17.6 C20.6 8.4 22.5 10.1 22.5 12.6 C22.5 15.1 20.6 16.8 17.6 16.8 H15.4 V21.8 H12.2 Z M15.4 11.1 H17.3 C18.3 11.1 19.0 11.7 19.0 12.6 C19.0 13.5 18.3 14.1 17.3 14.1 H15.4 Z"
+        fill="url(#g)" fill-rule="evenodd"/>
+</svg>
