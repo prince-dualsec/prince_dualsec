@@ -21,6 +21,7 @@ import NotFound from './components/NotFound'
 import ScrollToTop from './components/ScrollToTop'
 import CustomCursor from './components/CustomCursor'
 import BackToTop from './components/BackToTop'
+import HackerBackground from './components/HackerBackground'
 
 function HomePage() {
   return (
@@ -53,7 +54,10 @@ function AppContent() {
     <>
       <CustomCursor />
       {!booted && <BootScreen onComplete={handleBootComplete} />}
-      <div className={`page-shell min-h-screen cyber-grid transition-opacity duration-500 ${booted ? 'opacity-100' : 'opacity-0'}`}>
+      {/* Fixed behind everything; the grid now lives in here rather than on
+          the page shell, so content scrolls over a still backdrop. */}
+      <HackerBackground />
+      <div className={`page-shell min-h-screen transition-opacity duration-500 ${booted ? 'opacity-100' : 'opacity-0'}`}>
         <ScrollToTop />
         <Navbar />
         <AnimatePresence mode="wait">

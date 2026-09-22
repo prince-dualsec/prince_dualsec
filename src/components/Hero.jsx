@@ -28,6 +28,32 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-radial" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyber-cyan/5 rounded-full blur-[90px] hero-blur-cyan" />
         <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-cyber-blue/5 rounded-full blur-[80px] hero-blur-blue" />
+        {/* Dims the digital rain (HackerBackground) behind the headline. */}
+        <div className="absolute inset-0 hero-spotlight" />
+      </div>
+
+      {/* Hacker HUD: scan beam, corner brackets and terminal readouts */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="hero-scanbeam decor-animated" />
+      </div>
+      <div className="absolute inset-x-4 sm:inset-x-8 top-20 bottom-5 sm:bottom-8 pointer-events-none" aria-hidden="true">
+        <span className="absolute top-0 left-0 w-6 h-6 sm:w-8 sm:h-8 border-t-2 border-l-2 border-cyber-cyan/40" />
+        <span className="absolute top-0 right-0 w-6 h-6 sm:w-8 sm:h-8 border-t-2 border-r-2 border-cyber-cyan/40" />
+        <span className="absolute bottom-0 left-0 w-6 h-6 sm:w-8 sm:h-8 border-b-2 border-l-2 border-cyber-cyan/40" />
+        <span className="absolute bottom-0 right-0 w-6 h-6 sm:w-8 sm:h-8 border-b-2 border-r-2 border-cyber-cyan/40" />
+
+        <span className="hidden lg:block absolute top-2 left-12 font-mono text-[11px] tracking-wider text-cyber-cyan/55">
+          root@prince:~# <span className="animate-blink">_</span>
+        </span>
+        <span className="hidden lg:block absolute top-2 right-12 font-mono text-[11px] tracking-wider text-cyber-cyan/55">
+          [ ACCESS GRANTED ]
+        </span>
+        <span className="hidden lg:block absolute bottom-2 left-12 font-mono text-[11px] tracking-wider text-cyber-muted/60">
+          SYS.STATUS :: <span className="text-cyber-green/70">ONLINE</span>
+        </span>
+        <span className="hidden lg:block absolute bottom-2 right-12 font-mono text-[11px] tracking-wider text-cyber-muted/60">
+          // {siteConfig.username}
+        </span>
       </div>
 
       {/* Floating Icons */}

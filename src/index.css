@@ -48,6 +48,15 @@
   --scrollbar-track: #0a0a0f;
   --scrollbar-thumb: #21262d;
   --grid-opacity: 0.03;
+
+  /* Hacker backdrop (HackerBackground.jsx) + translucent surfaces */
+  --bg-card-glass: rgba(20, 25, 42, 0.66);
+  --rain-hero: 0.55;
+  --rain-rest: 0.17;
+  --scanline: rgba(0, 0, 0, 0.22);
+  --vignette: rgba(0, 0, 0, 0.6);
+  --glow-a: rgba(0, 212, 255, 0.09);
+  --glow-b: rgba(0, 255, 136, 0.05);
 }
 
 /* Light Theme */
@@ -88,6 +97,14 @@
   --scrollbar-track: #eef0f4;
   --scrollbar-thumb: #c0c5d0;
   --grid-opacity: 0.04;
+
+  --bg-card-glass: rgba(251, 252, 254, 0.8);
+  --rain-hero: 0.22;
+  --rain-rest: 0.07;
+  --scanline: rgba(15, 23, 42, 0.035);
+  --vignette: rgba(15, 23, 42, 0.1);
+  --glow-a: rgba(0, 112, 243, 0.08);
+  --glow-b: rgba(16, 163, 96, 0.05);
 }
 
 /* ═══════════════════════════════════════════════
@@ -95,7 +112,7 @@
    ═══════════════════════════════════════════════ */
 
 .theme-light .glass-card {
-  background: var(--bg-card-solid);
+  background: var(--bg-card-glass);
   border-color: rgba(0, 112, 243, 0.12);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.03);
 }
@@ -287,10 +304,14 @@
      more opaque fill is visually near-identical at a fraction of the cost.
      Blur is kept only on the few surfaces that genuinely overlap content
      (navbar, modals, dropdowns, chat panel). */
+  /* Translucent so the hacker backdrop reads through, but without blur: the
+     rain behind changes every frame, and a blurred card would have to be
+     re-rendered with it. The faint inner top edge sells the glass. */
   .glass-card {
-    background: var(--bg-card-solid);
+    background: var(--bg-card-glass);
     border: 1px solid var(--border-alpha);
     border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
@@ -488,6 +509,7 @@
 
   .cv-print-hide,
   .no-print,
+  .hacker-bg,
   nav,
   footer {
     display: none !important;
@@ -530,6 +552,102 @@
   .decor-animated {
     animation: none !important;
   }
+}
+
+/* ═══════════════════════════════════════════════
+   HACKER BACKDROP — see HackerBackground.jsx
+   ═══════════════════════════════════════════════ */
+
+.hacker-bg {
+  --rain-mix: 0; /* 0 over the hero → 1 once scrolled past it (set in JS) */
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hacker-bg__base,
+.hacker-bg__grid,
+.hacker-bg__scanlines,
+.hacker-bg__vignette {
+  position: absolute;
+  inset: 0;
+}
+
+.hacker-bg__base {
+  background:
+    radial-gradient(60rem 40rem at 12% 6%, var(--glow-a), transparent 60%),
+    radial-gradient(50rem 36rem at 90% 94%, var(--glow-b), transparent 60%),
+    var(--bg-primary);
+}
+
+.hacker-bg__grid {
+  background-image:
+    linear-gradient(rgba(var(--accent-rgb), var(--grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--accent-rgb), var(--grid-opacity)) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.hacker-bg__rain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: calc(var(--rain-hero) * (1 - var(--rain-mix)) + var(--rain-rest) * var(--rain-mix));
+  transition: opacity 0.25s linear;
+  /* Quieter in the middle, where headings and text sit; vivid at the edges. */
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(0, 0, 0, 0.4), #000 85%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(0, 0, 0, 0.4), #000 85%);
+}
+
+.hacker-bg__scanlines {
+  background: repeating-linear-gradient(to bottom, var(--scanline) 0 1px, transparent 1px 3px);
+}
+
+.hacker-bg__vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, var(--vignette) 100%);
+}
+
+/* Hero: darkened pool behind the headline so it stays crisp over the rain. */
+.hero-spotlight {
+  background: radial-gradient(ellipse 58% 52% at 50% 50%,
+    rgb(var(--cyber-black) / 0.82) 0%,
+    rgb(var(--cyber-black) / 0.45) 55%,
+    transparent 80%);
+}
+
+@media (max-width: 767px) {
+  /* Text spans the full width on a phone; so must the pool. */
+  .hero-spotlight {
+    background: radial-gradient(ellipse 110% 50% at 50% 50%,
+      rgb(var(--cyber-black) / 0.8) 0%,
+      rgb(var(--cyber-black) / 0.4) 65%,
+      transparent 92%);
+  }
+}
+
+/* A scan beam sweeping down the hero. The element is as tall as the hero and
+   only its bottom edge is painted, so translateY(-100% → 100%) crosses the
+   whole section while animating transform alone. */
+.hero-scanbeam {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    transparent 80%,
+    rgba(var(--accent-rgb), 0.05) 94%,
+    rgba(var(--accent-rgb), 0.3) 99.6%,
+    transparent 100%);
+  transform: translateY(-100%);
+  animation: heroScan 8s linear infinite;
+}
+
+@keyframes heroScan {
+  to { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scanbeam { animation: none; }
 }
 
 /* Long unbroken strings (hashes, DNS records, URLs) must not push the page

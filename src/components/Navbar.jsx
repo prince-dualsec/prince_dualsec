@@ -117,7 +117,9 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-cyber-black/80 backdrop-blur-xl border-b border-cyber-border/50 shadow-lg shadow-cyber-black/50 navbar-scrolled'
-          : 'bg-transparent'
+          // A soft fade rather than fully clear: the hero's digital rain runs
+          // right up under the bar and would otherwise speckle the links.
+          : 'bg-gradient-to-b from-cyber-black/80 to-transparent'
       }`}
     >
       {/* Wider than the page's max-w-7xl content shell: the nav carries more in
