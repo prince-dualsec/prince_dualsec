@@ -22,9 +22,9 @@ function ProjectCard({ project, index, inView }) {
       className="glass-card lift lift-strong sheen overflow-hidden group"
     >
       {/* Header */}
-      <div className="relative h-48 bg-gradient-to-br from-cyber-dark to-cyber-black flex items-center justify-center overflow-hidden project-card-header">
+      <div className="relative h-32 sm:h-48 bg-gradient-to-br from-cyber-dark to-cyber-black flex items-center justify-center overflow-hidden project-card-header">
         <div className="absolute inset-0 cyber-grid opacity-30" />
-        <FiCode className="w-16 h-16 text-cyber-cyan/20 group-hover:text-cyber-cyan/40 transition-all duration-500 group-hover:scale-110" />
+        <FiCode className="w-12 h-12 sm:w-16 sm:h-16 text-cyber-cyan/20 group-hover:text-cyber-cyan/40 transition-all duration-500 group-hover:scale-110" />
         
         {/* Category Badge */}
         <div
@@ -50,7 +50,7 @@ function ProjectCard({ project, index, inView }) {
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="p-5 sm:p-6">
         <h3 className="text-lg font-semibold text-cyber-white mb-2 group-hover:text-cyber-cyan transition-colors">
           {project.title}
         </h3>
@@ -115,7 +115,7 @@ export default function Projects() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// PORTFOLIO</span>
           <h2 className="section-heading mt-2">Projects</h2>
@@ -127,13 +127,13 @@ export default function Projects() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
+          className="flex flex-wrap justify-center gap-2 mb-8 sm:mb-12"
         >
           {projectCategories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
+              className={`px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${
                 activeCategory === cat.id
                   ? 'bg-cyber-cyan/15 text-cyber-cyan border border-cyber-cyan/30'
                   : 'text-cyber-muted hover:text-cyber-white hover:bg-cyber-dark/50 border border-transparent'
@@ -145,7 +145,7 @@ export default function Projects() {
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredProjects.map((project, i) => (
             <ProjectCard
               key={project.id}
@@ -161,13 +161,13 @@ export default function Projects() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.8 }}
-          className="text-center mt-12"
+          className="text-center mt-8 sm:mt-12"
         >
           <a
             href="https://github.com/prince-dualsec?tab=repositories"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-cyber-muted hover:text-cyber-cyan transition-colors group"
+            className="inline-flex items-center gap-2 py-2 text-cyber-muted hover:text-cyber-cyan transition-colors group"
           >
             <span>View all repositories</span>
             <FiArrowRight className="group-hover:translate-x-1 transition-transform" />

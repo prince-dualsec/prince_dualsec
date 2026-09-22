@@ -142,7 +142,7 @@ export default function BootScreen({ onComplete }) {
                 {/* Blinking Cursor */}
                 <div className="mt-4 text-xs text-cyber-cyan">
                   <span className="animate-blink">_</span>
-                  <span className="ml-2" style={{ color: 'var(--text-muted)' }}>click or press any key to skip</span>
+                  <span className="ml-2" style={{ color: 'var(--text-muted)' }}>tap, click or press any key to skip</span>
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import {
@@ -48,8 +48,43 @@ export default function SecurityAnalysis() {
 
   const ActiveComponent = activeTool ? tools.find(t => t.id === activeTool)?.component : null
 
+  // On a phone the tool grid is one long column, so a card near the bottom is
+  // thousands of pixels below where the opened tool renders. Without these
+  // scrolls, tapping a tool swapped content off-screen and looked like nothing
+  // happened; Back then dropped the visitor somewhere unrelated.
+  const viewTopRef = useRef(null)
+  const returnToRef = useRef(null)
+
+  const openTool = (id) => {
+    returnToRef.current = null
+    setActiveTool(id)
+    const top = viewTopRef.current
+    // 80px: the fixed navbar. If the top of the view is already on screen
+    // below it, leave the scroll position alone.
+    if (top && top.getBoundingClientRect().top < 80) {
+      top.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  const closeTool = () => {
+    returnToRef.current = activeTool
+    setActiveTool(null)
+  }
+
+  // Fires once the outgoing view has finished animating out, i.e. just as the
+  // incoming one mounts (mode="wait"). Only acts after Back.
+  const handleExitComplete = () => {
+    const id = returnToRef.current
+    if (!id) return
+    returnToRef.current = null
+    requestAnimationFrame(() => {
+      document.querySelector(`[data-tool-id="${id}"]`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }
+
   return (
-    <section id="security-lab" className="section-block py-20 sm:py-32 px-4 relative overflow-hidden">
+    <section id="security-lab" className="section-block py-16 sm:py-32 px-4 relative overflow-hidden">
       {/* Subtle background grid accent */}
       <div className="absolute inset-0 pointer-events-none opacity-30">
         <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-cyber-cyan/10 to-transparent" />
@@ -62,10 +97,11 @@ export default function SecurityAnalysis() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-10 sm:mb-20"
         >
-          {/* Logo Area */}
-          <div className="inline-flex items-center justify-center mb-8">
+          {/* Logo Area — a block-level row, so the label below starts on its
+              own line instead of sitting beside the logo. */}
+          <div className="flex items-center justify-center mb-6 sm:mb-8">
             <div className="relative group">
               <div className="absolute inset-0 rounded-2xl bg-cyber-cyan/5 blur-xl group-hover:bg-cyber-cyan/10 transition-all duration-700" />
               <div className="relative w-20 h-20 rounded-2xl bg-cyber-dark/60 border border-cyber-cyan/20 flex items-center justify-center backdrop-blur-sm group-hover:border-cyber-cyan/40 transition-all duration-500">
@@ -79,9 +115,9 @@ export default function SecurityAnalysis() {
             </div>
           </div>
 
-          <span className="text-cyber-cyan font-mono text-sm tracking-widest">// SECURITY ANALYSIS</span>
-          <h2 className="section-heading mt-3 text-4xl md:text-5xl">Security Dashboard</h2>
-          <p className="section-subtitle max-w-2xl mx-auto text-lg">Professional security analysis tools and intelligence gathering</p>
+          <span className="block text-cyber-cyan font-mono text-xs sm:text-sm tracking-widest">// SECURITY ANALYSIS</span>
+          <h2 className="section-heading mt-3 text-3xl sm:text-4xl md:text-5xl">Security Dashboard</h2>
+          <p className="section-subtitle max-w-2xl mx-auto">Professional security analysis tools and intelligence gathering</p>
 
           {/* Decorative line */}
           <div className="flex items-center justify-center gap-3 mt-6">
@@ -91,7 +127,11 @@ export default function SecurityAnalysis() {
           </div>
         </motion.div>
 
-        <AnimatePresence mode="wait">
+        {/* Scroll target for opening a tool; scroll-padding-top on <html>
+            keeps it clear of the fixed navbar. */}
+        <div ref={viewTopRef} aria-hidden="true" />
+
+        <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
           {activeTool && ActiveComponent ? (
             <motion.div
               key="tool-view"
@@ -102,8 +142,8 @@ export default function SecurityAnalysis() {
               className="max-w-4xl mx-auto"
             >
               <button
-                onClick={() => setActiveTool(null)}
-                className="flex items-center gap-2 text-cyber-muted hover:text-cyber-cyan transition-colors mb-8 font-mono text-sm group"
+                onClick={closeTool}
+                className="flex items-center gap-2 -ml-1 px-1 py-2 text-cyber-muted hover:text-cyber-cyan transition-colors mb-4 sm:mb-8 font-mono text-sm group"
               >
                 <FiArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 Back to Dashboard
@@ -119,7 +159,7 @@ export default function SecurityAnalysis() {
               transition={{ duration: 0.3 }}
             >
               {/* Dashboard Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5 mb-8 sm:mb-12">
                 {[
                   { label: 'Tools Available', value: tools.length, color: 'text-cyber-cyan', icon: FaShieldAlt },
                   { label: 'Analyses Run', value: analysisHistory.length, color: 'text-cyber-green', icon: FiTerminal },
@@ -133,28 +173,29 @@ export default function SecurityAnalysis() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={inView ? { opacity: 1, y: 0 } : {}}
                       transition={{ delay: i * 0.1 }}
-                      className="glass-card lift p-6 text-center group hover:border-cyber-cyan/20 transition-all duration-300"
+                      className="glass-card lift p-4 sm:p-6 text-center group hover:border-cyber-cyan/20 transition-all duration-300"
                     >
-                      <Icon className={`w-5 h-5 ${stat.color} mx-auto mb-3 opacity-60`} />
-                      <div className={`text-3xl font-bold font-mono ${stat.color}`}>{stat.value}</div>
-                      <div className="text-xs text-cyber-muted mt-2 uppercase tracking-wider">{stat.label}</div>
+                      <Icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 sm:mb-3 opacity-60`} />
+                      <div className={`text-2xl sm:text-3xl font-bold font-mono ${stat.color}`}>{stat.value}</div>
+                      <div className="text-[10px] sm:text-xs text-cyber-muted mt-2 uppercase tracking-wider">{stat.label}</div>
                     </motion.div>
                   )
                 })}
               </div>
 
               {/* Tool Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
                 {tools.map((tool, i) => {
                   const Icon = tool.icon
                   return (
                     <motion.button
                       key={tool.id}
+                      data-tool-id={tool.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={inView ? { opacity: 1, y: 0 } : {}}
                       transition={{ delay: 0.1 + i * 0.05 }}
-                      onClick={() => setActiveTool(tool.id)}
-                      className="glass-card lift sheen p-6 text-left group hover:border-cyber-cyan/30 transition-all duration-300 cursor-pointer tool-accent-border"
+                      onClick={() => openTool(tool.id)}
+                      className="glass-card lift sheen p-4 sm:p-6 text-left group hover:border-cyber-cyan/30 transition-all duration-300 cursor-pointer tool-accent-border"
                       style={{ borderLeftColor: tool.color, '--tool-glow': `${tool.color}25` }}
                     >
                       <div className="flex items-start gap-4">
@@ -180,7 +221,7 @@ export default function SecurityAnalysis() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: 0.5 }}
-                  className="mt-12 glass-card p-8"
+                  className="mt-8 sm:mt-12 glass-card p-5 sm:p-8"
                 >
                   <h3 className="text-sm font-semibold text-cyber-white mb-5 flex items-center gap-2">
                     <FiInfo className="w-4 h-4 text-cyber-cyan" />
@@ -188,8 +229,8 @@ export default function SecurityAnalysis() {
                   </h3>
                   <div className="space-y-3">
                     {analysisHistory.slice(0, 5).map((entry, i) => (
-                      <div key={i} className="flex items-center justify-between py-3 border-b border-cyber-border/30 last:border-0">
-                        <div className="flex items-center gap-3">
+                      <div key={i} className="flex items-center justify-between gap-3 py-3 border-b border-cyber-border/30 last:border-0">
+                        <div className="flex items-center gap-3 min-w-0">
                           {entry.riskLevel === 'critical' || entry.riskLevel === 'high' ? (
                             <FiXCircle className="w-4 h-4 text-cyber-red" />
                           ) : entry.riskLevel === 'medium' ? (
@@ -199,7 +240,7 @@ export default function SecurityAnalysis() {
                           )}
                           <span className="text-sm text-cyber-text">{entry.tool}</span>
                         </div>
-                        <span className="text-xs text-cyber-muted font-mono">
+                        <span className="text-xs text-cyber-muted font-mono flex-shrink-0">
                           {new Date(entry.timestamp).toLocaleTimeString()}
                         </span>
                       </div>
@@ -213,7 +254,7 @@ export default function SecurityAnalysis() {
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.6 }}
-                className="mt-12 p-5 rounded-xl bg-cyber-orange/5 border border-cyber-orange/20 flex items-start gap-3"
+                className="mt-8 sm:mt-12 p-4 sm:p-5 rounded-xl bg-cyber-orange/5 border border-cyber-orange/20 flex items-start gap-3"
               >
                 <FaExclamationTriangle className="w-5 h-5 text-cyber-orange flex-shrink-0 mt-0.5" />
                 <div className="text-xs text-cyber-muted leading-relaxed">

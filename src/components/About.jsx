@@ -24,14 +24,14 @@ export default function About() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// ABOUT ME</span>
           <h2 className="section-heading mt-2">About Me</h2>
           <div className="w-20 h-1 bg-gradient-to-r from-cyber-cyan to-cyber-blue mx-auto mt-4 rounded-full" />
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left - Avatar & Stats */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -82,12 +82,12 @@ export default function About() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="glass-card p-8">
+            <div className="glass-card p-5 sm:p-8">
               <div className="font-mono text-sm text-cyber-muted mb-6">
                 <span className="text-cyber-cyan">class</span> <span className="text-cyber-green">CybersecurityExpert</span> {'{'}
               </div>
 
-              <div className="space-y-4 text-cyber-text leading-relaxed pl-4 border-l border-cyber-border">
+              <div className="space-y-4 text-cyber-text leading-relaxed pl-3 sm:pl-4 border-l border-cyber-border">
                 <p>
                   I'm a passionate cybersecurity professional with a deep commitment to securing digital landscapes.
                   My expertise spans <span className="text-cyber-cyan">penetration testing</span>,
@@ -123,8 +123,8 @@ export default function About() {
                   transition={{ delay: 0.5 + i * 0.1 }}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyber-dark/50 border border-cyber-border/50"
                 >
-                  <item.icon className="w-4 h-4" style={{ color: item.color }} />
-                  <span className="text-sm text-cyber-text">{item.label}</span>
+                  <item.icon className="w-4 h-4 flex-shrink-0" style={{ color: item.color }} />
+                  <span className="text-xs xs:text-sm text-cyber-text min-w-0">{item.label}</span>
                 </motion.div>
               ))}
             </div>

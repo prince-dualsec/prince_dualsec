@@ -24,5 +24,8 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    // Listen on the LAN as well as localhost, so the site can be opened on a
+    // phone at http://<this-machine's-IP>:3000 while developing.
+    host: true,
   },
 })

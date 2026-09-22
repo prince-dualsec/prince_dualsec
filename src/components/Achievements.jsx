@@ -26,18 +26,20 @@ function AchievementCard({ achievement, index, inView }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: index * 0.1 }}
-      className="glass-card lift sheen p-6 group"
+      className="glass-card lift sheen p-5 sm:p-6 group"
     >
-      <div className="flex items-start gap-4 mb-4">
+      <div className="flex items-start gap-3 sm:gap-4 mb-4">
         <div
-          className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+          className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-110"
           style={{ backgroundColor: `${achievement.color}15`, border: `1px solid ${achievement.color}30` }}
         >
-          <Icon className="w-7 h-7" style={{ color: achievement.color }} />
+          <Icon className="w-6 h-6 sm:w-7 sm:h-7" style={{ color: achievement.color }} />
         </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <h3 className="text-lg font-semibold text-cyber-white">{achievement.title}</h3>
+        <div className="flex-1 min-w-0">
+          {/* Wraps: a long title takes the full row and the status pill drops
+              beneath it, instead of squeezing the title to a word per line. */}
+          <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1.5 mb-1">
+            <h3 className="text-base sm:text-lg font-semibold text-cyber-white leading-snug">{achievement.title}</h3>
             <span
               className="flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium flex-shrink-0"
               style={{
@@ -78,14 +80,14 @@ export default function Achievements() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// CREDENTIALS</span>
           <h2 className="section-heading mt-2">Achievements & Certifications</h2>
           <p className="section-subtitle">Professional certifications and milestones</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {achievementsData.map((achievement, i) => (
             <AchievementCard
               key={achievement.id}

@@ -334,7 +334,7 @@
   }
 
   .section-subtitle {
-    @apply text-lg mb-12;
+    @apply text-base sm:text-lg mb-8 sm:mb-12;
     color: var(--text-muted);
   }
 
@@ -539,6 +539,32 @@
   word-break: break-word;
 }
 
+/* The page shell never scrolls sideways. Sections slide in from ±30px before
+   they enter the viewport, and on a phone anything that pokes past the right
+   edge widens the layout viewport: the page pans sideways and every fixed
+   element (navbar, CV modal) stretches past the screen. body overflow-x alone
+   does not stop that on mobile browsers. `clip` is preferred because, unlike
+   `hidden`, it does not turn the shell into a scroll container. */
+.page-shell {
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  .page-shell {
+    overflow-x: clip;
+  }
+}
+
+/* iOS Safari zooms the whole page in when a focused field's text is under
+   16px, and leaves it zoomed after blur. Touch devices get 16px fields. */
+@media (hover: none) and (pointer: coarse) {
+  input:is([type="text"], [type="email"], [type="url"], [type="search"], [type="password"], [type="tel"], [type="number"], :not([type])),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 /* ═══════════════════════════════════════════════
    MOTION — interaction polish
    All of these animate transform/opacity only, so they stay on the compositor
@@ -551,10 +577,15 @@
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.25s ease,
               box-shadow 0.35s ease;
-  will-change: transform;
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Only where the hover lift can actually happen. On a phone, promoting
+     every card to its own compositor layer costs memory for no effect. */
+  .lift {
+    will-change: transform;
+  }
+
   .lift:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 34px rgba(var(--accent-rgb), 0.12);

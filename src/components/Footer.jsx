@@ -27,7 +27,9 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-cyber-border/50 bg-cyber-black/50">
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      {/* Extra bottom padding on phones so the floating back-to-top button
+          never sits on top of the last line. */}
+      <div className="max-w-6xl mx-auto px-4 pt-12 pb-20 sm:pb-12">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
@@ -44,14 +46,14 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-cyber-white mb-4">Quick Links</h4>
-            <div className="grid grid-cols-2 gap-2">
+            <h4 className="text-sm font-semibold text-cyber-white mb-2.5">Quick Links</h4>
+            <div className="grid grid-cols-2 gap-x-4">
               {links.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); const id = link.href.substring(1); const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth' }) }}
-                  className="text-sm text-cyber-muted hover:text-cyber-cyan transition-colors"
+                  className="py-1.5 text-sm text-cyber-muted hover:text-cyber-cyan transition-colors"
                 >
                   {link.label}
                 </a>
@@ -68,7 +70,7 @@ export default function Footer() {
                   key={label}
                   href={href}
                   {...(!href.startsWith('mailto:') && { target: '_blank', rel: 'noopener noreferrer' })}
-                  className="w-10 h-10 rounded-lg bg-cyber-dark/50 border border-cyber-border/50 flex items-center justify-center text-cyber-muted hover:text-cyber-cyan hover:border-cyber-cyan/30 transition-all duration-300"
+                  className="w-11 h-11 rounded-lg bg-cyber-dark/50 border border-cyber-border/50 flex items-center justify-center text-cyber-muted hover:text-cyber-cyan hover:border-cyber-cyan/30 transition-all duration-300"
                   aria-label={label}
                 >
                   <Icon className="w-4 h-4" />
@@ -79,7 +81,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-cyber-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="pt-8 border-t border-cyber-border/30 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="text-xs text-cyber-muted/50 font-mono">
             &copy; {currentYear} {siteConfig.username}. All rights reserved.
           </p>

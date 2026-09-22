@@ -75,17 +75,19 @@ export default function ConnectMenu({ inline = false }) {
       buttonRef.current?.focus()
     }
 
-    document.addEventListener('mousedown', onPointerDown)
+    // pointerdown, not mousedown: on touch screens mouse events are only
+    // synthesised after a completed tap, so a swipe outside never closed it.
+    document.addEventListener('pointerdown', onPointerDown)
     document.addEventListener('keydown', onKey)
     return () => {
-      document.removeEventListener('mousedown', onPointerDown)
+      document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKey)
     }
   }, [open, close])
 
   if (inline) {
     return (
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-3">
         {channels.map(({ id, label, icon: Icon, color, href }) => (
           <a
             key={id}
@@ -94,7 +96,7 @@ export default function ConnectMenu({ inline = false }) {
             rel="noopener noreferrer"
             aria-label={label}
             title={label}
-            className="w-10 h-10 rounded-lg bg-cyber-dark/50 border border-cyber-border/50 flex items-center justify-center text-cyber-muted hover:text-cyber-white hover:border-cyber-cyan/30 transition-all duration-200"
+            className="w-11 h-11 rounded-lg bg-cyber-dark/50 border border-cyber-border/50 flex items-center justify-center text-cyber-muted hover:text-cyber-white hover:border-cyber-cyan/30 transition-all duration-200"
           >
             <Icon className="w-4 h-4" style={{ color }} />
           </a>
@@ -111,7 +113,7 @@ export default function ConnectMenu({ inline = false }) {
         aria-haspopup="true"
         aria-expanded={open}
         aria-label="Connect with me"
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 border border-transparent hover:border-cyber-cyan/20 transition-all duration-200"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 border border-transparent hover:border-cyber-cyan/20 transition-all duration-200"
       >
         <FaWhatsapp className="w-3.5 h-3.5" />
         <span className="hidden sm:inline">Connect</span>

@@ -1,10 +1,14 @@
 /**
  * Resolves the backend origin.
  *
- * Hard-coding localhost breaks the moment the site is opened from another
- * device: `localhost` there means that visitor's own machine, so every API call
- * fails. When no explicit VITE_BACKEND_URL is configured, derive the origin
- * from whatever host actually served the page and keep the backend port.
+ * - An explicit VITE_BACKEND_URL wins (e.g. a backend hosted elsewhere).
+ * - A production build otherwise talks to its own origin: on Vercel the /api
+ *   routes are serverless functions deployed alongside the site
+ *   (see api/). The old default of "<host>:3001" pointed every visitor at a
+ *   port that does not exist on Vercel, so those calls always failed.
+ * - In development, derive the origin from whatever host served the page and
+ *   use the Express server's port. Hard-coding localhost would break the
+ *   moment the dev site is opened from a phone on the same network.
  */
 const BACKEND_PORT = 3001
 
@@ -18,6 +22,9 @@ function resolveBackendUrl() {
   if (configured && !(/\/\/(localhost|127\.0\.0\.1)/.test(configured) && !isLocal)) {
     return configured.replace(/\/$/, '')
   }
+
+  // Same origin: requests go to /api/... on the site itself.
+  if (import.meta.env.PROD) return ''
 
   if (typeof window === 'undefined') return `http://localhost:${BACKEND_PORT}`
 

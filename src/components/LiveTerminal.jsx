@@ -124,7 +124,7 @@ export default function LiveTerminal() {
   return (
     <section id="playbook" className="section-block py-16 sm:py-24 px-4 relative">
       <div className="max-w-5xl mx-auto" ref={ref}>
-        <Reveal className="text-center mb-12">
+        <Reveal className="text-center mb-8 sm:mb-12">
           <span className="text-cyber-cyan font-mono text-sm">// METHODOLOGY</span>
           <h2 className="section-heading mt-2">Recon Playbook</h2>
           <p className="section-subtitle">How an authorised assessment actually runs, step by step</p>
@@ -133,16 +133,16 @@ export default function LiveTerminal() {
         <Reveal delay={0.1}>
           <div className="rounded-xl overflow-hidden border border-cyber-cyan/20 shadow-[0_0_50px_rgba(var(--accent-rgb),0.06)]">
             {/* Title bar */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-cyber-border bg-cyber-dark/60">
-              <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-              <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
-              <span className="w-3 h-3 rounded-full bg-[#28c840]" />
-              <span className="ml-3 text-xs font-mono text-cyber-muted truncate">root@prince:~/engagement</span>
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 border-b border-cyber-border bg-cyber-dark/60">
+              <span className="w-3 h-3 rounded-full bg-[#ff5f57] flex-shrink-0" />
+              <span className="w-3 h-3 rounded-full bg-[#febc2e] flex-shrink-0" />
+              <span className="w-3 h-3 rounded-full bg-[#28c840] flex-shrink-0" />
+              <span className="ml-2 sm:ml-3 min-w-0 text-xs font-mono text-cyber-muted truncate">root@prince:~/engagement</span>
 
-              <div className="ml-auto flex items-center gap-1">
+              <div className="ml-auto flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
                 <button
                   onClick={() => setPlaying((p) => !p)}
-                  className="p-1.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
+                  className="p-2.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
                   aria-label={playing ? 'Pause playbook' : 'Play playbook'}
                   title={playing ? 'Pause' : 'Play'}
                 >
@@ -150,7 +150,7 @@ export default function LiveTerminal() {
                 </button>
                 <button
                   onClick={skip}
-                  className="p-1.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
+                  className="p-2.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
                   aria-label="Next command"
                   title="Next"
                 >
@@ -158,7 +158,7 @@ export default function LiveTerminal() {
                 </button>
                 <button
                   onClick={restart}
-                  className="p-1.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
+                  className="p-2.5 rounded-md text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 transition-colors"
                   aria-label="Restart playbook"
                   title="Restart"
                 >

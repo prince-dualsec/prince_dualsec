@@ -8,21 +8,56 @@ const options = [
   { value: 'system', label: 'System', icon: FiMonitor },
 ]
 
-export default function ThemeSwitcher({ compact = false }) {
+/**
+ * `inline` renders the three options as a segmented control instead of a
+ * dropdown — for the mobile menu, where a popover opening off the bottom of a
+ * scrollable panel gets clipped.
+ */
+export default function ThemeSwitcher({ compact = false, inline = false }) {
   const { theme, changeTheme } = useTheme()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
   useEffect(() => {
+    if (!open) return
+    // pointerdown rather than mousedown: touch browsers only synthesise mouse
+    // events after a tap completes, and not at all when the touch scrolls.
     const handler = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false)
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [])
+    document.addEventListener('pointerdown', handler)
+    return () => document.removeEventListener('pointerdown', handler)
+  }, [open])
 
   const current = options.find(o => o.value === theme) || options[0]
   const Icon = current.icon
+
+  if (inline) {
+    return (
+      <div role="radiogroup" aria-label="Theme" className="flex items-center justify-center">
+        <div className="inline-flex p-1 rounded-lg bg-cyber-dark/50 border border-cyber-border/50">
+          {options.map(opt => {
+            const OptIcon = opt.icon
+            const active = theme === opt.value
+            return (
+              <button
+                key={opt.value}
+                role="radio"
+                aria-checked={active}
+                onClick={() => changeTheme(opt.value)}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-medium transition-colors ${
+                  active ? 'text-cyber-cyan bg-cyber-cyan/10' : 'text-cyber-muted hover:text-cyber-white'
+                }`}
+              >
+                <OptIcon className="w-3.5 h-3.5" />
+                {opt.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
 
   if (compact) {
     return (
@@ -63,7 +98,7 @@ export default function ThemeSwitcher({ compact = false }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 border border-transparent hover:border-cyber-cyan/20 transition-all duration-200"
+        className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium text-cyber-muted hover:text-cyber-cyan hover:bg-cyber-cyan/10 border border-transparent hover:border-cyber-cyan/20 transition-all duration-200"
         aria-label="Switch theme"
       >
         <Icon className="w-3.5 h-3.5" />

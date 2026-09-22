@@ -70,7 +70,7 @@ export default function Journey() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// TIMELINE</span>
           <h2 className="section-heading mt-2">Security Journey</h2>

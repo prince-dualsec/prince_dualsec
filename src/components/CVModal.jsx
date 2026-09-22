@@ -185,7 +185,7 @@ export default function CVModal({ isOpen, onClose }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 16 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="cv-modal cv-print-root relative w-full max-w-4xl max-h-[92vh] sm:max-h-[90vh] flex flex-col overflow-hidden rounded-2xl border border-cyber-cyan/20 shadow-[0_0_40px_rgba(0,212,255,0.1)]"
+            className="cv-modal cv-print-root relative w-full max-w-4xl max-h-[92vh] sm:max-h-[90vh] supports-[height:100dvh]:max-h-[92dvh] sm:supports-[height:100dvh]:max-h-[90dvh] flex flex-col overflow-hidden rounded-2xl border border-cyber-cyan/20 shadow-[0_0_40px_rgba(0,212,255,0.1)]"
             style={{ background: 'rgb(var(--cyber-black) / 0.98)' }}
           >
             {!showCV ? (
@@ -284,31 +284,39 @@ export default function CVModal({ isOpen, onClose }) {
                 {/* Sheet */}
                 <div className="cv-print-sheet flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 md:p-10 space-y-6 sm:space-y-8 scrollbar-thin">
                   {/* Header */}
-                  <header className="cv-block flex items-start justify-between gap-6 pb-6 border-b border-cyber-border/30 print:border-gray-300">
-                    <div className="flex items-start gap-4 flex-1 min-w-0">
-                      <div className="w-20 h-20 rounded-2xl bg-cyber-cyan/10 border border-cyber-cyan/30 print:border-gray-300 flex items-center justify-center flex-shrink-0">
-                        <Logo className="w-10 h-10 text-cyber-cyan print:text-gray-700" />
+                  <header className="cv-block pb-6 border-b border-cyber-border/30 print:border-gray-300">
+                    <div className="flex items-start justify-between gap-4 sm:gap-6">
+                      <div className="flex items-start gap-4 flex-1 min-w-0">
+                        {/* The brand tile is dropped on phones: next to the photo
+                            it left the name a column one word wide. */}
+                        <div className="hidden sm:flex w-20 h-20 rounded-2xl bg-cyber-cyan/10 border border-cyber-cyan/30 print:border-gray-300 items-center justify-center flex-shrink-0">
+                          <Logo className="w-10 h-10 text-cyber-cyan print:text-gray-700" />
+                        </div>
+                        <div className="min-w-0">
+                          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-mono mb-1 text-cyber-white print:text-black break-words">
+                            {siteConfig.name}
+                          </h1>
+                          <p className="text-cyber-cyan font-mono text-base sm:text-lg print:text-blue-700 break-anywhere">{siteConfig.username}</p>
+                          <p className="text-sm sm:text-base text-cyber-muted mt-2 print:text-gray-600">{siteConfig.role}</p>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <h1 className="text-3xl md:text-4xl font-bold font-mono mb-1 text-cyber-white print:text-black">
-                          {siteConfig.name}
-                        </h1>
-                        <p className="text-cyber-cyan font-mono text-lg print:text-blue-700">{siteConfig.username}</p>
-                        <p className="text-cyber-muted mt-2 print:text-gray-600">{siteConfig.role}</p>
+                      <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                        <img
+                          src={assetUrl(siteConfig.profileImage)}
+                          alt={siteConfig.name}
+                          width="825"
+                          height="1024"
+                          className="w-[84px] h-[105px] sm:w-[105px] sm:h-[131px] rounded-lg object-cover object-top border border-cyber-border/30 print:border-gray-300"
+                        />
+                        <p className="hidden sm:block max-w-[180px] text-sm text-cyber-cyan/60 font-mono print:text-gray-500 text-right break-anywhere">
+                          Prepared for: {name}
+                        </p>
                       </div>
                     </div>
-                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
-                      <img
-                        src={assetUrl(siteConfig.profileImage)}
-                        alt={siteConfig.name}
-                        width="825"
-                        height="1024"
-                        className="w-[105px] h-[131px] rounded-lg object-cover object-top border border-cyber-border/30 print:border-gray-300"
-                      />
-                      <p className="text-sm text-cyber-cyan/60 font-mono print:text-gray-500 text-right">
-                        Prepared for: {name}
-                      </p>
-                    </div>
+                    {/* On phones the photo column is too narrow to hold this. */}
+                    <p className="sm:hidden mt-4 text-xs text-cyber-cyan/60 font-mono break-anywhere">
+                      Prepared for: {name}
+                    </p>
                   </header>
 
                   <Section title="Contact">

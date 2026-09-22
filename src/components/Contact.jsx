@@ -87,6 +87,10 @@ export default function Contact() {
           .cyber-glow { animation: none !important; filter: drop-shadow(0 0 12px rgba(var(--accent-rgb), 0.55)); }
           .cyber-halo, .cyber-ring, .cyber-ripple, .cyber-ripple-2, .cyber-ripple-3,
           .cyber-scan, .cyber-glitch { animation: none !important; }
+          /* The keyframes carried the centring translate; keep it without them. */
+          .cyber-halo, .cyber-ring, .cyber-ripple, .cyber-ripple-2, .cyber-ripple-3 {
+            transform: translate(-50%, -50%);
+          }
         }
       `}</style>
 
@@ -95,14 +99,14 @@ export default function Contact() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// GET IN TOUCH</span>
           <h2 className="section-heading mt-2">Contact</h2>
           <p className="section-subtitle">Have a security project or want to collaborate? Let's talk.</p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch max-w-5xl mx-auto">
           {/* Contact Info — unchanged */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -110,25 +114,25 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-xl mx-auto lg:mx-0 w-full"
           >
-            <div className="glass-card p-6 h-full flex flex-col">
-              <h3 className="text-lg font-semibold text-cyber-white mb-6">Contact Information</h3>
+            <div className="glass-card p-4 sm:p-6 h-full flex flex-col">
+              <h3 className="text-lg font-semibold text-cyber-white mb-4 sm:mb-6">Contact Information</h3>
 
-              <div className="space-y-4">
-                <a href={`https://wa.me/${siteConfig.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
+              <div className="space-y-3 sm:space-y-4">
+                <a href={`https://wa.me/${siteConfig.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center flex-shrink-0">
                     <FaWhatsapp className="w-5 h-5 text-cyber-cyan" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs text-cyber-muted">WhatsApp</div>
                     <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors">Chat on WhatsApp</div>
                   </div>
                 </a>
 
-                <a href={`tel:${siteConfig.phone2}`} className="flex items-center gap-4 p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
+                <a href={`tel:${siteConfig.phone2}`} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center flex-shrink-0">
                     <FiPhone className="w-5 h-5 text-cyber-cyan" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs text-cyber-muted">Phone</div>
                     <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors">Call Me</div>
                   </div>
@@ -138,32 +142,36 @@ export default function Contact() {
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${siteConfig.email}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group"
+                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center flex-shrink-0">
                     <FiMail className="w-5 h-5 text-cyber-cyan" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs text-cyber-muted">Email</div>
-                    <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors">{siteConfig.email}</div>
+                    <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors break-anywhere">
+                      {/* Prefer to wrap after the @ on narrow phones rather than
+                          splitting the domain mid-word. */}
+                      {siteConfig.email.split('@')[0]}@<wbr />{siteConfig.email.split('@').slice(1).join('@')}
+                    </div>
                   </div>
                 </a>
 
-                <a href={siteConfig.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
+                <a href={siteConfig.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center flex-shrink-0">
                     <FiLinkedin className="w-5 h-5 text-cyber-cyan" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs text-cyber-muted">LinkedIn</div>
                     <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors">Connect on LinkedIn</div>
                   </div>
                 </a>
 
-                <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center">
+                <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-cyber-dark/30 border border-cyber-border/30 hover:border-cyber-cyan/20 transition-all group">
+                  <div className="w-10 h-10 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/20 flex items-center justify-center flex-shrink-0">
                     <FiGithub className="w-5 h-5 text-cyber-cyan" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="text-xs text-cyber-muted">GitHub</div>
                     <div className="text-sm text-cyber-white group-hover:text-cyber-cyan transition-colors">@{siteConfig.username}</div>
                   </div>
@@ -179,7 +187,7 @@ export default function Contact() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="max-w-xl mx-auto lg:mx-0 w-full"
           >
-            <div className="logo-card glass-card p-6 h-full flex items-center justify-center min-h-[360px] relative overflow-hidden group">
+            <div className="logo-card glass-card p-6 h-full flex items-center justify-center min-h-[280px] sm:min-h-[360px] relative overflow-hidden group">
 
               {/* ── Radial glow halo behind everything ── */}
               <div
@@ -189,11 +197,13 @@ export default function Contact() {
                 }}
               />
 
-              {/* ── Radar ripple rings ── */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="cyber-ripple absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/35" />
-                <div className="cyber-ripple-2 absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/25" />
-                <div className="cyber-ripple-3 absolute w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/20" />
+              {/* ── Radar ripple rings ── positioned from the centre point: the
+                  keyframes already apply translate(-50%, -50%), so flex-centring
+                  them as well pushed every ring up and to the left. */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="cyber-ripple absolute left-1/2 top-1/2 w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/35" />
+                <div className="cyber-ripple-2 absolute left-1/2 top-1/2 w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/25" />
+                <div className="cyber-ripple-3 absolute left-1/2 top-1/2 w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-cyber-cyan/20" />
               </div>
 
               {/* ── Rotating glowing ring ── */}

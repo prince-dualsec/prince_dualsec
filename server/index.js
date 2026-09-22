@@ -11,6 +11,7 @@ dotenv.config({ path: join(__dirname, '.env') });
 import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
+import { fetchNvdFeed } from '../shared/nvdFeed.js';
 
 const app = express();
 app.use(cors());
@@ -683,53 +684,9 @@ app.get('/api/security/cve', async (req, res) => {
 const cveFeedCache = { data: null, fetchedAt: 0, inFlight: null };
 const CVE_FEED_TTL = 15 * 60 * 1000;
 
-const severityRank = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
-
-async function loadCveFeed() {
-  const end = new Date();
-  const start = new Date(end.getTime() - 3 * 24 * 60 * 60 * 1000);
-  const fmt = (d) => d.toISOString().replace('Z', '');
-
-  const url = `https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate=${fmt(start)}&pubEndDate=${fmt(end)}&resultsPerPage=40`;
-  const response = await fetch(url, { signal: AbortSignal.timeout(20000) });
-  if (!response.ok) throw new Error(`NVD returned ${response.status}`);
-
-  const data = await response.json();
-  const items = (data.vulnerabilities || []).map((v) => {
-    const cve = v.cve;
-    const metric = cve.metrics?.cvssMetricV31?.[0] || cve.metrics?.cvssMetricV30?.[0] || cve.metrics?.cvssMetricV2?.[0];
-    const score = metric?.cvssData?.baseScore ?? null;
-    return {
-      id: cve.id,
-      description: cve.descriptions?.find((d) => d.lang === 'en')?.value || '',
-      score,
-      severity: metric?.cvssData?.baseSeverity
-        || (score === null ? 'UNSCORED' : score >= 9 ? 'CRITICAL' : score >= 7 ? 'HIGH' : score >= 4 ? 'MEDIUM' : 'LOW'),
-      published: cve.published || null,
-      url: `https://nvd.nist.gov/vuln/detail/${cve.id}`,
-    };
-  });
-
-  // Most severe first, then most recent.
-  items.sort((a, b) =>
-    (severityRank[b.severity] || 0) - (severityRank[a.severity] || 0) ||
-    new Date(b.published) - new Date(a.published)
-  );
-
-  const counts = items.reduce((acc, i) => {
-    acc[i.severity] = (acc[i.severity] || 0) + 1;
-    return acc;
-  }, {});
-
-  return {
-    status: 'ok',
-    source: 'NVD',
-    windowDays: 3,
-    totalInWindow: data.totalResults ?? items.length,
-    counts,
-    items: items.slice(0, 20),
-  };
-}
+// The NVD query and shaping live in shared/nvdFeed.js, which the Vercel
+// function (api/security/cve-feed.js) and the browser fallback also use.
+const loadCveFeed = () => fetchNvdFeed({ apiKey: process.env.NVD_API_KEY });
 
 app.get('/api/security/cve-feed', async (_req, res) => {
   const fresh = Date.now() - cveFeedCache.fetchedAt < CVE_FEED_TTL;

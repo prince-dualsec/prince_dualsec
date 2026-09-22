@@ -18,7 +18,11 @@ export default function Hero() {
   const showDecor = useMotionOK()
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    // svh, not vh: on mobile browsers 100vh includes the area under the
+    // address bar, which hid the scroll hint. The vertical padding keeps the
+    // content clear of the fixed navbar and the hint on short (landscape)
+    // screens, where the content is taller than the viewport.
+    <section id="hero" className="relative min-h-screen supports-[min-height:100svh]:min-h-[100svh] flex items-center justify-center overflow-hidden pt-24 pb-28 sm:py-28">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-radial" />
@@ -52,9 +56,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/20 text-cyber-cyan text-sm font-mono mb-8"
+          className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full bg-cyber-cyan/10 border border-cyber-cyan/20 text-cyber-cyan text-xs xs:text-sm font-mono mb-6 sm:mb-8"
         >
-          <span className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-cyber-green animate-pulse flex-shrink-0" />
           Available for security projects
         </motion.div>
 
@@ -133,7 +137,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

@@ -13,19 +13,19 @@ function RepoCard({ repo, index, inView }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay: index * 0.1 }}
-      className="glass-card lift sheen p-6 group block"
+      className="glass-card lift sheen p-5 sm:p-6 group block min-w-0"
     >
       <div className="flex items-start justify-between mb-3">
         <FiGithub className="w-5 h-5 text-cyber-cyan group-hover:scale-110 transition-transform" />
         <FiExternalLink className="w-4 h-4 text-cyber-muted opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
-      <h3 className="text-lg font-semibold text-cyber-white mb-2 group-hover:text-cyber-cyan transition-colors font-mono">
+      <h3 className="text-base sm:text-lg font-semibold text-cyber-white mb-2 group-hover:text-cyber-cyan transition-colors font-mono break-anywhere">
         {repo.name}
       </h3>
       <p className="text-sm text-cyber-muted leading-relaxed mb-4 line-clamp-2">
         {repo.description || 'No description available.'}
       </p>
-      <div className="flex items-center gap-4 text-xs text-cyber-muted">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-cyber-muted">
         {repo.language && (
           <span className="flex items-center gap-1.5">
             <span className="w-3 h-3 rounded-full" style={{
@@ -147,7 +147,7 @@ export default function GitHub() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
           <span className="text-cyber-cyan font-mono text-sm">// OPEN SOURCE</span>
           <h2 className="section-heading mt-2">GitHub</h2>
@@ -167,10 +167,10 @@ export default function GitHub() {
             href={`https://github.com/${githubConfig.username}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-6 py-3 glass-card hover:border-cyber-cyan/30 transition-all duration-300 group"
+            className="inline-flex max-w-full items-center gap-3 px-5 sm:px-6 py-3 glass-card hover:border-cyber-cyan/30 transition-all duration-300 group"
           >
             <FiGithub className="w-6 h-6 text-cyber-cyan" />
-            <span className="text-cyber-white font-mono">@{githubConfig.username}</span>
+            <span className="text-cyber-white font-mono break-anywhere">@{githubConfig.username}</span>
           </a>
 
           {profile && (

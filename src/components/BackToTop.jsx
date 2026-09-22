@@ -22,8 +22,8 @@ export default function BackToTop() {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          /* Sits to the left of the AI launcher so the two never overlap. */
-          className="fixed bottom-5 right-[4.25rem] sm:bottom-6 sm:right-24 z-40 w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyber-dark/80 border border-cyber-border/60 backdrop-blur-md flex items-center justify-center text-cyber-muted hover:text-cyber-cyan hover:border-cyber-cyan/40 transition-colors"
+          /* safe-area insets keep it clear of the iPhone home indicator. */
+          className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] sm:bottom-6 sm:right-6 z-40 w-11 h-11 rounded-xl bg-cyber-dark/80 border border-cyber-border/60 backdrop-blur-md flex items-center justify-center text-cyber-muted hover:text-cyber-cyan hover:border-cyber-cyan/40 transition-colors"
           aria-label="Back to top"
           title="Back to top"
         >

@@ -72,12 +72,40 @@ export default function Navbar() {
     }
   }, [])
 
-  const handleNavClick = (href) => {
-    setIsOpen(false)
-    const el = document.querySelector(href)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
+  // While the mobile menu is open: freeze the page behind it, close on Escape,
+  // and close if the window grows past the breakpoint where the menu is hidden
+  // (otherwise the scroll lock would outlive a menu nobody can see).
+  useEffect(() => {
+    if (!isOpen) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const onKey = (e) => { if (e.key === 'Escape') setIsOpen(false) }
+    const wide = window.matchMedia('(min-width: 1500px)')
+    const onWide = () => { if (wide.matches) setIsOpen(false) }
+
+    window.addEventListener('keydown', onKey)
+    wide.addEventListener('change', onWide)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKey)
+      wide.removeEventListener('change', onWide)
     }
+  }, [isOpen])
+
+  const handleNavClick = (href) => {
+    const el = document.querySelector(href)
+    if (!isOpen) {
+      el?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+    setIsOpen(false)
+    // Scroll only once the menu has closed and the scroll lock is released.
+    // Starting the smooth scroll in the same tick is what made every menu link
+    // a dead tap on phones: the close re-render cancelled it before it began.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => el?.scrollIntoView({ behavior: 'smooth' }))
+    })
   }
 
   return (
@@ -181,42 +209,62 @@ export default function Navbar() {
         />
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — opacity/translate only. Animating height to or from
+          'auto' makes framer-motion measure the element and restore
+          window.scrollY afterwards, which cancels any scroll in flight. */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="nav:hidden bg-cyber-black/95 backdrop-blur-xl border-t border-cyber-border/50 navbar-mobile-menu max-h-[calc(100vh-4rem)] overflow-y-auto overscroll-contain"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="nav:hidden bg-cyber-black/95 backdrop-blur-xl border-t border-b border-cyber-border/50 navbar-mobile-menu max-h-[calc(100vh-4rem)] supports-[height:100dvh]:max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
           >
-            <div className="px-4 py-4 space-y-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeSection === link.href.substring(1)
-                      ? 'text-cyber-cyan bg-cyber-cyan/10'
-                      : 'text-cyber-muted hover:text-cyber-white hover:bg-cyber-dark/50'
-                  }`}
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="pt-4 border-t border-cyber-border/50 sm:hidden space-y-4">
+            <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 sm:py-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                    aria-current={activeSection === link.href.substring(1) ? 'page' : undefined}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                      activeSection === link.href.substring(1)
+                        ? 'text-cyber-cyan bg-cyber-cyan/10'
+                        : 'text-cyber-muted hover:text-cyber-white hover:bg-cyber-dark/50'
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+              <div className="mt-3 pt-4 pb-1 border-t border-cyber-border/50 sm:hidden space-y-4">
                 <ConnectMenu inline />
-                <div className="flex justify-center">
-                  <ThemeSwitcher />
-                </div>
+                <ThemeSwitcher inline />
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.nav>
+
+    {/* Tap anywhere outside the open menu to dismiss it. Sits under the nav
+        (z-40 vs z-50), so the menu itself stays interactive. */}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          key="menu-backdrop"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          onClick={() => setIsOpen(false)}
+          className="nav:hidden fixed inset-0 z-40 bg-black/50"
+          aria-hidden="true"
+        />
+      )}
+    </AnimatePresence>
     <CVModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
     </>
   )

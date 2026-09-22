@@ -92,7 +92,7 @@ export default function ThreatFeed() {
   return (
     <section id="threat-feed" className="section-block py-16 sm:py-24 px-4 relative">
       <div className="max-w-6xl mx-auto" ref={ref}>
-        <Reveal className="text-center mb-12">
+        <Reveal className="text-center mb-8 sm:mb-12">
           <span className="text-cyber-cyan font-mono text-sm">// LIVE INTELLIGENCE</span>
           <h2 className="section-heading mt-2">Live Threat Feed</h2>
           <p className="section-subtitle">
