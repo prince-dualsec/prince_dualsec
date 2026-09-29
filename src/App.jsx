@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/react'
 import { ThemeProvider } from './contexts/ThemeContext'
 import BootScreen from './components/BootScreen'
 import Navbar from './components/Navbar'
@@ -82,7 +81,6 @@ function App() {
     <ThemeProvider>
       <AppContent />
       <Analytics />
-      <SpeedInsights />
     </ThemeProvider>
   )
 }
